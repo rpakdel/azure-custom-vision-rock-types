@@ -26,7 +26,6 @@ var server = http.createServer(app);
  */
 let host = "0.0.0.0"
 server.listen({
-  host,
   port
 });
 server.on('error', onError);

@@ -4,16 +4,40 @@ class App {
     constructor(elements) {
         this.elements = elements
 
-        this.elements.snapButton.addEventListener("click", this.snapButtonClicked.bind(this))
+        this.elements.camVideo.addEventListener("click", this.snapButtonClicked.bind(this))
+        this.elements.videoSelect.addEventListener("change", this.initializeUserMedia.bind(this))
+        
     
+        this.initializeDevices()
         this.initializeUserMedia()
     }
 
+    initializeDevices() {
+        navigator.mediaDevices.enumerateDevices()
+        .then(deviceInfos => {
+            deviceInfos.filter(d => d.kind === 'videoinput').forEach(d => {
+                let option = document.createElement('option');
+                option.text = d.label
+                option.value = d.deviceId
+                this.elements.videoSelect.appendChild(option)
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
+
     initializeUserMedia() {
+
+        if (this.elements.camVideo.srcObject !== null) {
+            this.elements.camVideo.srcObject.getTracks().forEach(track => track.stop())
+        }
         
+        let videoDeviceId = this.elements.videoSelect.value
+
         var constraints = {
             audio: false,
-            video: true
+            video: { deviceId: videoDeviceId }
         }
 
         navigator.mediaDevices.getUserMedia(constraints)
@@ -62,6 +86,7 @@ class App {
 }
 
 let elements = {
+    videoSelect: document.getElementById("videoSource"),
     camVideo: document.getElementById("camVideo"),
     snapButton: document.getElementById("snapButton"),
     picCanvas: document.getElementById("picCanvas")

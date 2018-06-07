@@ -10,8 +10,10 @@
 
 <body>
   <div id="container">
-    <video id="camVideo" autoplay playsinline></video>
-    <button id="snapButton">Take snapshot</button>
+      <div id="sources">
+        <label for="videoSource">Video source: </label><select id="videoSource"></select>
+      </div>
+    <video id="camVideo" autoplay playsinline></video>    
     <canvas id="picCanvas" width="480" height="360"></canvas>
   </div>
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
