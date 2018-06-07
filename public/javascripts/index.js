@@ -37,26 +37,27 @@ class App {
         let ctx = this.elements.picCanvas.getContext('2d')
         ctx.drawImage(this.elements.camVideo, 0, 0, w, h)
 
-        let img = this.elements.picCanvas.toDataURL()
+        let imgDataURL = this.elements.picCanvas.toDataURL()
 
-        this.uploadImageToServer(img)
+        this.uploadImageToServer(imgDataURL)
     }
 
-    uploadImageToServer(img) {
+    uploadImageToServer(imgDataURL) {
 
-        let formData = new FormData()
-        formData.append("img", img)
+        fetch(imgDataURL).then(res => res.blob()).then(blob => {
+
+            let formData = new FormData()        
+            formData.append("blob", blob)
 
 
-        let fetchOptions = {
-            method: "POST",
-            body: formData,
-            headers: {
-                "Content-Type": "multipart/form-data"
+            let fetchOptions = {
+                method: "POST",
+                body: formData,
+                
             }
-        }
 
-        fetch("/api/v1/image", fetchOptions)
+            fetch("/api/v1/image", fetchOptions).then(res => res.json()).then(j => console.log(j))
+        })
     }
 }
 
