@@ -13,24 +13,23 @@ class App {
     }
 
     initializeDevices() {
-        let selected = this.elements.videoSelect.value
 
-        while(this.elements.videoSelect.firstChild) {
-            this.elements.videoSelect.removeChild(this.elements.videoSelect.firstChild)
-        } 
+        let children = Array.prototype.slice.call(this.elements.videoSelect.children)
 
         return navigator.mediaDevices.enumerateDevices()
         .then(deviceInfos => {
             deviceInfos.filter(d => d.kind === 'videoinput').forEach(deviceInfo => {
-                let option = document.createElement('option');
-                option.text = deviceInfo.label
-                option.value = deviceInfo.deviceId
-                this.elements.videoSelect.appendChild(option)
-            })
+                let option = children.find(o => o.value === deviceInfo.deviceId)
 
-            if (selected) {
-                this.elements.videoSelect.value = selected
-            }
+                if (!option) {
+                    option = document.createElement('option')
+                    option.value = deviceInfo.deviceId
+                    this.elements.videoSelect.appendChild(option)
+                }
+                option.text = deviceInfo.label
+                
+                
+            })
         })
         .catch(err => {
             console.log(err)
