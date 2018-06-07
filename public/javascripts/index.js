@@ -8,17 +8,20 @@ class App {
         this.elements.videoSelect.addEventListener("change", this.initializeUserMedia.bind(this))
         
     
-        this.initializeDevices()
-        this.initializeUserMedia()
+        this.initializeDevices().then(() => this.initializeUserMedia())
     }
 
     initializeDevices() {
-        navigator.mediaDevices.enumerateDevices()
+        while(this.elements.videoSelect.firstChild) {
+            this.elements.videoSelect.removeChild(this.elements.videoSelect.firstChild)
+        } 
+
+        return navigator.mediaDevices.enumerateDevices()
         .then(deviceInfos => {
-            deviceInfos.filter(d => d.kind === 'videoinput').forEach(d => {
+            deviceInfos.filter(d => d.kind === 'videoinput').forEach(deviceInfo => {
                 let option = document.createElement('option');
-                option.text = d.label
-                option.value = d.deviceId
+                option.text = deviceInfo.label
+                option.value = deviceInfo.deviceId
                 this.elements.videoSelect.appendChild(option)
             })
         })
@@ -44,9 +47,10 @@ class App {
             .then(stream => {
                 // make stream available to browser console
                 this.elements.camVideo.srcObject = stream;
+                this.initializeDevices();
             })
             .catch(err => {
-                console.log('navigator.getUserMedia error: ', error);
+                console.log('navigator.getUserMedia error: ', err);
             }
         )
     }
