@@ -5,11 +5,15 @@ class App {
         this.elements = elements
 
         this.elements.camVideo.addEventListener("click", this.snapButtonClicked.bind(this))
-        this.elements.videoSelect.addEventListener("change", this.initializeUserMedia.bind(this))
+        this.elements.videoSelect.addEventListener("change", this.onVideoSourceChange.bind(this))
         
     
         this.initializeDevices()
-            .then(this.initializeUserMedia())
+            .then(this.initializeUserMedia(true))
+    }
+
+    onVideoSourceChange() {
+        this.initializeUserMedia(false)
     }
 
     initializeDevices() {
@@ -27,8 +31,6 @@ class App {
                     this.elements.videoSelect.appendChild(option)
                 }
                 option.text = deviceInfo.label
-                
-                
             })
         })
         .catch(err => {
@@ -36,7 +38,7 @@ class App {
         });
     }
 
-    initializeUserMedia() {
+    initializeUserMedia(initializeDevices) {
 
         if (this.elements.camVideo.srcObject !== null) {
             this.elements.camVideo.srcObject.getTracks().forEach(track => track.stop())
@@ -54,7 +56,9 @@ class App {
                 // make stream available to browser console
                 this.elements.camVideo.srcObject = stream;
 
-                this.initializeDevices()
+                if (initializeDevices) {
+                    this.initializeDevices()
+                }
             })
             .catch(err => {
                 console.log('navigator.getUserMedia error: ', err);
