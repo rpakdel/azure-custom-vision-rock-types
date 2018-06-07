@@ -44,11 +44,11 @@ class App {
             this.elements.camVideo.srcObject.getTracks().forEach(track => track.stop())
         }
         
-        let videoDeviceId = this.elements.videoSelect.value
+        let videoSource = this.elements.videoSelect.value
 
-        var constraints = {
+        let constraints = {
             audio: false,
-            video: { deviceId: videoDeviceId }
+            video: { deviceId: videoSource ? {exact: videoSource} : undefined}
         }
 
         return navigator.mediaDevices.getUserMedia(constraints)
