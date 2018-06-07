@@ -8,10 +8,13 @@ class App {
         this.elements.videoSelect.addEventListener("change", this.initializeUserMedia.bind(this))
         
     
-        this.initializeDevices().then(() => this.initializeUserMedia())
+        this.initializeDevices()
+            .then(this.initializeUserMedia())
     }
 
     initializeDevices() {
+        let selected = this.elements.videoSelect.value
+
         while(this.elements.videoSelect.firstChild) {
             this.elements.videoSelect.removeChild(this.elements.videoSelect.firstChild)
         } 
@@ -24,6 +27,10 @@ class App {
                 option.value = deviceInfo.deviceId
                 this.elements.videoSelect.appendChild(option)
             })
+
+            if (selected) {
+                this.elements.videoSelect.value = selected
+            }
         })
         .catch(err => {
             console.log(err)
@@ -43,11 +50,12 @@ class App {
             video: { deviceId: videoDeviceId }
         }
 
-        navigator.mediaDevices.getUserMedia(constraints)
+        return navigator.mediaDevices.getUserMedia(constraints)
             .then(stream => {
                 // make stream available to browser console
                 this.elements.camVideo.srcObject = stream;
-                this.initializeDevices();
+
+                this.initializeDevices()
             })
             .catch(err => {
                 console.log('navigator.getUserMedia error: ', err);
