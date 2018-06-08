@@ -100,7 +100,16 @@ class App {
                 
             }
 
-            fetch("/api/v1/image", fetchOptions).then(res => res.json()).then(j => console.log(j))
+            fetch("/api/v1/image", fetchOptions).then(res => res.json()).then(j => {
+                let rocktype1 = j.predictions[0].rocktype
+                let rocktype1prop = j.predictions[0].probability * 100
+
+                let rocktype2 = j.predictions[1].rocktype
+                let rocktype2prop = j.predictions[1].probability * 100
+
+                this.elements.prediction1.innerText =  rocktype1 + ": " + rocktype1prop.toFixed(1) + "%"
+                this.elements.prediction2.innerText =  rocktype2 + ": " + rocktype2prop.toFixed(1) + "%"
+            })
         })
     }
 }
@@ -109,7 +118,9 @@ let elements = {
     videoSelect: document.getElementById("videoSource"),
     camVideo: document.getElementById("camVideo"),
     snapButton: document.getElementById("snapButton"),
-    picCanvas: document.getElementById("picCanvas")
+    picCanvas: document.getElementById("picCanvas"),
+    prediction1: document.getElementById("prediction1"),
+    prediction2: document.getElementById("prediction2")
 }
 
 const app = new App(elements)

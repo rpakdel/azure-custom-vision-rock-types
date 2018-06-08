@@ -1,11 +1,10 @@
 body {
-  padding: 10px;
-  font-size: 10px;
   font-family: sans-serif;
 }
 
-a {
-  color: #00B7FF;
+#hint {
+  font-size: 10px;
+  margin: 5px;
 }
 
 #container {
@@ -13,26 +12,38 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  align-content: center;
+  align-content: space-around;
 }
 
 #sources {
+  flex-grow: 1;
   margin: 5px;  
 }
 
-#snapButton { 
-  width: 480px;
-  margin: 5px;
-  padding: 5px;
-  background-color: lightgrey;
-  border-style: solid;
-  border-color: darkgray;
-  border-radius: 3px;
-  border-width: 1px;
-  align-content: center;
+#picCanvas {
+  flex-grow: 1;
   text-align: center;
 }
 
-#picCanvas {
+#predictionsContainer {
   margin: 5px;
+  flex-grow: 0;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: white;
+  background: black;
+  border-style: solid;
+  border-color: lightgrey;
+  border-width: 1px;
+  border-radius: 3px;
+  right: 5px;
+  top: 5px;
+  z-index: 1;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#predictions {
+  font-size: 10px;
 }
