@@ -48,7 +48,12 @@ class App {
 
         let constraints = {
             audio: false,
-            video: { deviceId: videoSource ? {exact: videoSource} : undefined}
+            video: { 
+                // if video source is defined, exactly match it
+                deviceId: videoSource ? { exact: videoSource } : undefined,
+                // if video source is not defined, start with back camera
+                facingMode: videoSource ? undefined : { ideal: "environment" }
+            }
         }
 
         return navigator.mediaDevices.getUserMedia(constraints)
